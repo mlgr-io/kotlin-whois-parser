@@ -1,0 +1,10 @@
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates
+#
+
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    # Look for `build.gradle` and `settings.gradle` files in the root directory
+    directory: "/"
+    schedule:
+      interval: "daily"

@@ -30,7 +30,7 @@ class WhoisService private constructor() {
 
     /**
      * Reads all implemenation of [Parser] from the "io.mailguru.whois.parser.impl" namespace and mounts them into a
-     * [Map] with their [Parser.whoisServer] as the key and their instance as a value.
+     * [Map] with each of their [Parser.whoisServers] as the key and their instance as a value.
      * <p>
      * Since the singleton pattern is used (for [WhoisService]), every [Parser] implementation should be instantiated
      * only once, too.
@@ -38,11 +38,14 @@ class WhoisService private constructor() {
     private val availableParsers: Map<String, Parser> by lazy {
         Reflections("io.mailguru.whois.parser.impl").getSubTypesOf(Parser::class.java)
             .filterNot { Modifier.isAbstract(it.modifiers) }
-            .associate { clazz ->
+            .flatMap { clazz ->
                 clazz.getDeclaredConstructor().newInstance()!!.let { instance: Parser ->
-                    instance.whoisServer to Parboiled.createParser(clazz)
+                    instance.whoisServers.map {
+                        Pair(it, Parboiled.createParser(clazz))
+                    }
                 }
             }
+            .associate { it.first to it.second }
     }
 
     /**

@@ -9,10 +9,10 @@ import org.parboiled.annotations.BuildParseTree
 
 /**
  * Abstract base class for whois result parsers.
- * @param whoisServer The FQDN of the whois server this parser should be responsible for.
+ * @param whoisServers The FQDN of the whois servers this parser should be responsible for.
  */
 @BuildParseTree
-abstract class Parser(val whoisServer: String) : BaseParser<Any>() {
+abstract class Parser(val whoisServers: Collection<String>) : BaseParser<Any>() {
 
     companion object {
         const val PARSE_ERROR_MSG = "The input could not be parsed properly."

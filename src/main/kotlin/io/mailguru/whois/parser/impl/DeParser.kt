@@ -2,14 +2,10 @@ package io.mailguru.whois.parser.impl
 
 import io.mailguru.whois.enumeration.Status
 import io.mailguru.whois.model.MutableWhoisResult
-import io.mailguru.whois.model.WhoisResult
 import io.mailguru.whois.parser.Parser
 import org.parboiled.Action
 import org.parboiled.Context
 import org.parboiled.Rule
-import org.parboiled.errors.ErrorUtils
-import org.parboiled.parserunners.ReportingParseRunner
-import org.parboiled.support.ParseTreeUtils
 
 /**
  * See https://www.denic.de/fileadmin/public/documentation/DENIC-12p_EN.pdf
@@ -59,28 +55,5 @@ open class DeParser : Parser(setOf("whois.denic.de")) {
             },
 //            Action { _: Context<MutableWhoisResult> -> push(result) },
         )
-    }
-
-    override fun parse(input: String): WhoisResult {
-        return ReportingParseRunner<MutableWhoisResult>(start()).run(input).let { result ->
-
-            check(result.parseErrors.isEmpty()) {
-                ParseTreeUtils.printNodeTree(result)
-                result.parseErrors.forEach {
-                    ErrorUtils.printParseError(it)
-                }
-
-                PARSE_ERROR_MSG
-            }
-
-            result.resultValue.let { mutableResult ->
-                WhoisResult(
-                    domain = mutableResult.domain ?: error(PARSE_ERROR_MSG),
-                    status = mutableResult.status ?: error(PARSE_ERROR_MSG),
-                    headerComment = mutableResult.header.joinToString("\n") { it.trim() }.trim('\n'),
-                    changedAt = mutableResult.changed
-                )
-            }
-        }
     }
 }

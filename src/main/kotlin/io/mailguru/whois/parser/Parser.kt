@@ -30,7 +30,7 @@ abstract class Parser(val whoisServers: Collection<String>) : BaseParser<Any>() 
      * @throws IllegalStateException if the given input could not be parsed correctly.
      */
     @Throws(IllegalStateException::class)
-    fun parse(input: String): WhoisResult {
+    open fun parse(input: String): WhoisResult {
         return ReportingParseRunner<MutableWhoisResult>(start()).run(input).let { result ->
 
             check(result.parseErrors.isEmpty()) {

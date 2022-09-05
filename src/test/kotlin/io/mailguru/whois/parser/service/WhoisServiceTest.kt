@@ -1,7 +1,7 @@
 package io.mailguru.whois.parser.service
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.withClue
-import io.kotest.matchers.maps.shouldNotContainKey
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mailguru.whois.callPrivateMethod
@@ -10,6 +10,7 @@ import io.mailguru.whois.getPrivateProperty
 import io.mailguru.whois.mockFieldByName
 import io.mailguru.whois.mockPrivateFields
 import io.mailguru.whois.model.WhoisResult
+import io.mailguru.whois.model.exception.NotPermittedException
 import io.mailguru.whois.parser.Parser
 import io.mailguru.whois.service.WhoisService
 import io.mockk.every
@@ -57,11 +58,34 @@ internal class WhoisServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["whois.nic.ch", "whois.nic.es", "whois.nic.li"])
-    fun `some whois servers does not output any information at all`(whoisServer: String) {
-        availableParsers?.let {
-            it shouldNotContainKey whoisServer
-        } ?: fail("The map of available parsers should not be null.")
+    @CsvSource(
+        "ch,whois.nic.ch",
+        "es,whois.nic.es",
+        "ch,whois.nic.li",
+    )
+    fun `some whois servers does not output any information at all`(tld: String, whoisServer: String) {
+
+        // Mocking stuff
+
+        val whoisClientMock = mockk<WhoisClient>()
+        every { whoisClientMock.connect(any<String>()) } just runs
+        every { whoisClientMock.query("foobar.$tld") } returns "some data that doesn't matter"
+        every { whoisClientMock.query(tld) } returns "whois:$whoisServer"
+        every { whoisClientMock.disconnect() } just runs
+
+        val sut = WhoisService.INSTANCE
+        val preservedWhoisClient: WhoisClient = sut.getPrivateProperty("whois")
+            ?: fail("There is no WhoisClient to mock.")
+        sut.mockPrivateFields(whoisClientMock)
+
+        // Do the tests
+        shouldThrow<NotPermittedException> {
+            sut.lookup("foobar.$tld")
+        }
+
+        // Unmocking
+
+        sut.mockPrivateFields(preservedWhoisClient)
     }
 
     @ParameterizedTest

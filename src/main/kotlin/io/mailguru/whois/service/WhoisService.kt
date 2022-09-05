@@ -1,6 +1,7 @@
 package io.mailguru.whois.service
 
 import io.mailguru.whois.model.WhoisResult
+import io.mailguru.whois.model.exception.NotPermittedException
 import io.mailguru.whois.parser.Parser
 import org.apache.commons.net.whois.WhoisClient
 import org.parboiled.Parboiled
@@ -63,10 +64,11 @@ class WhoisService private constructor() {
      * @return The final result for the requested [hostname].
      * @return null if no responsible whois server could be found.
      * @throws IllegalArgumentException if the whois data could not be parsed correctly.
+     * @throws NotPermittedException if the NIC doesn't provide any data via their whois server.
      * @throws IOException if the whois request itself failed.
      */
     @Suppress("SwallowedException")
-    @Throws(IllegalArgumentException::class, IOException::class)
+    @Throws(IllegalArgumentException::class, IOException::class, NotPermittedException::class)
     fun lookup(hostname: String): WhoisResult? = getWhoisServer(hostname)?.let { whoisServer ->
         availableParsers[whoisServer]?.let { parser ->
             whois.connect(whoisServer)

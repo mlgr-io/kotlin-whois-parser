@@ -5,4 +5,8 @@ enum class Status {
     FAILED,
     FREE,
     INVALID,
+
+    DEACTIVATED,
+    RESERVED,
+    WAITING_LIST,
 }

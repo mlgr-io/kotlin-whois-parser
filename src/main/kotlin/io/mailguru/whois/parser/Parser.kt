@@ -44,7 +44,7 @@ abstract class Parser(val whoisServers: Collection<String>) : BaseParser<Any>() 
 
             result.resultValue.let { mutableResult ->
                 WhoisResult(
-                    domain = mutableResult.domain ?: error(PARSE_ERROR_MSG),
+                    domain = mutableResult.domain ?: domain,
                     status = mutableResult.status ?: error(PARSE_ERROR_MSG),
                     headerComment = mutableResult.header.joinToString("\n") { it.trim() }.trim('\n'),
                     changedAt = mutableResult.changed
@@ -55,8 +55,18 @@ abstract class Parser(val whoisServers: Collection<String>) : BaseParser<Any>() 
 
     abstract fun start(): Rule
 
+    open fun ignoreRowsNotStartingWith(key: String): Rule = ZeroOrMore(
+        TestNot(IgnoreCase(key)),
+        ZeroOrMore(NoneOf("\n")),
+        OneOrMore('\n'),
+    )
+
+    open fun singleRowWithActionIgnorePrevious(key: String, action: Action<String>): Rule = Sequence(
+        ignoreRowsNotStartingWith(key),
+        singleRowWithAction(key, action),
+    )
+
     open fun singleRowWithAction(key: String, action: Action<String>): Rule = Sequence(
-        ZeroOrMore(' '),
         IgnoreCase(key),
         ZeroOrMore(' '),
         ZeroOrMore(NoneOf("\n")),

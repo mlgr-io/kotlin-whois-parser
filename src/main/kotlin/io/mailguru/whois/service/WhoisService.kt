@@ -74,7 +74,7 @@ class WhoisService private constructor() {
             whois.connect(whoisServer)
             whois.query(hostname).let {
                 whois.disconnect()
-                parser.parse(it)
+                parser.parse(hostname, it)
             }
         }
     }

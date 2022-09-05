@@ -156,7 +156,7 @@ internal class WhoisServiceTest {
                 override val value: Map<String, Parser>
                     get() = mapOf(
                         "whois.denic.de" to mockk<Parser>().also { parserMock ->
-                            every { parserMock.parse(any()) } returns WhoisResult(
+                            every { parserMock.parse(any(), any()) } returns WhoisResult(
                                 domain = "google.de",
                                 status = Status.CONNECT
                             )

@@ -23,7 +23,7 @@ internal class NoDataAvailableParserTest {
     fun `expect an exception on every parse() call`(inputFilename: String) {
         TestUtil.getResourceAsText(inputFilename)?.let { input ->
             shouldThrow<NotPermittedException> {
-                sut.parse(input)
+                sut.parse("example.com", input)
             }
         } ?: fail("Input may not be null.")
     }

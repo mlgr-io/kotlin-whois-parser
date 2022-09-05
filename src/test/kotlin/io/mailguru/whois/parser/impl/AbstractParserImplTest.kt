@@ -26,7 +26,7 @@ internal abstract class AbstractParserImplTest {
         expectation: WhoisResult?
     ) {
         TestUtil.getResourceAsText(inputFilename)?.let { input ->
-            getSut().parse(input).also { result ->
+            getSut().parse("example.com", input).also { result ->
                 expectation?.apply {
                     assertEquals(changedAt, result.changedAt)
                     assertEquals(domain, result.domain)

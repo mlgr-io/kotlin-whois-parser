@@ -27,5 +27,5 @@ open class NoDataAvailableParser : Parser(
      * @throws NotPermittedException always.
      */
     @Throws(NotPermittedException::class)
-    override fun parse(input: String): WhoisResult = throw NotPermittedException()
+    override fun parse(hostname: String, input: String): WhoisResult = throw NotPermittedException()
 }

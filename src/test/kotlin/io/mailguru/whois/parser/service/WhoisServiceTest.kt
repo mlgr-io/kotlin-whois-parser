@@ -49,8 +49,6 @@ internal class WhoisServiceTest {
         const val TESTRESPONSE = "useless string data"
     }
 
-    private val availableParsers: Map<String, Parser>? = WhoisService.getPrivateProperty("availableParsers")
-
     @BeforeEach
     fun beforeEach() {
         // clear the cache
@@ -75,6 +73,7 @@ internal class WhoisServiceTest {
         @ParameterizedTest
         @ValueSource(strings = ["whois.nic.ch", "whois.denic.de"])
         fun `the service should find all available parser implementations`(whoisServer: String) {
+            val availableParsers: Map<String, Parser>? = WhoisService.getPrivateProperty("availableParsers")
             availableParsers?.also { map ->
                 withClue(String.format(Locale.ROOT, "Retrieve parser for%s:", whoisServer)) {
                     map[whoisServer] shouldNotBe null

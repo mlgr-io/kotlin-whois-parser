@@ -1,0 +1,29 @@
+# Copyright (c) 2002 - 2022 by DK Hostmaster A/S
+#
+# Version: 5.0.2
+
+Domain:               connect.dk
+DNS:                  connect.dk
+Registered:           1999-01-10
+Expires:              2023-03-31
+Registrar:            Registrar Co.
+Registration period:  1 year
+VID:                  no
+DNSSEC:               Unsigned delegation, DNSSEC disabled, no records
+Status:               Active
+
+Registrant
+Handle:               ***N/A***
+Name:                 Example Co.
+Attention:            Domain Administrator
+Address:              123 Example St
+Postalcode:           99999
+City:                 Mountain View
+Country:              US
+Phone:                +1 555-555-5555
+
+Nameservers
+Hostname:             ns1.connect.dk
+Hostname:             ns2.connect.dk
+Hostname:             ns3.connect.dk
+Hostname:             ns4.connect.dk

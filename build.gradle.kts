@@ -42,7 +42,6 @@ dependencies {
     // add additional dependencies here
     implementation("commons-net:commons-net:" + versions["commons-net"])
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.parboiled:parboiled-java:" + versions["parboiled"])
     implementation("org.reflections:reflections:" + versions["reflections"])
     testImplementation("io.mockk:mockk:" + versions["mockk"])

@@ -33,7 +33,7 @@ plugins {
 
 base {
     group = "io.mailguru"
-    version = "0.1.0-SNAPSHOT"
+    version = "0.1.0"
     archivesName.set("mailguru-whois-parser")
 }
 
@@ -60,7 +60,7 @@ plugins.withId("com.vanniktech.maven.publish.base") {
         signAllPublications()
         pom {
             name.set(project.name)
-            description.set("Kotlin model library for usage with various mailguru.io APIs.")
+            description.set("A library for WHOIS response parsing.")
             url.set("https://github.com/mlgr-io/kotlin-whois-parser")
             licenses {
                 license {

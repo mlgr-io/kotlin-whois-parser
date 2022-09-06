@@ -2,6 +2,7 @@ package io.mailguru.whois.service
 
 import io.mailguru.whois.model.WhoisResult
 import io.mailguru.whois.model.exception.NotPermittedException
+import io.mailguru.whois.model.exception.ParserNotImplementedException
 import io.mailguru.whois.parser.Parser
 import org.apache.commons.net.whois.WhoisClient
 import org.parboiled.Parboiled
@@ -10,6 +11,7 @@ import java.io.IOException
 import java.lang.reflect.Modifier
 import java.net.SocketException
 import java.net.UnknownHostException
+import java.util.Locale
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
@@ -62,14 +64,26 @@ object WhoisService {
      * @throws IllegalArgumentException if the whois data could not be parsed correctly.
      * @throws NotPermittedException if the NIC doesn't provide any data via their whois server.
      * @throws IOException if the whois request itself failed.
+     * @throws ParserNotImplementedException if the required parser implementation was not found.
      */
     @JvmStatic
     @Suppress("SwallowedException")
-    @Throws(IllegalArgumentException::class, IOException::class, NotPermittedException::class)
+    @Throws(
+        IllegalArgumentException::class,
+        IOException::class,
+        NotPermittedException::class,
+        ParserNotImplementedException::class,
+    )
     fun lookup(hostname: String): WhoisResult? = getWhoisServer(hostname)?.let { whoisServer ->
         availableParsers[whoisServer]?.parse(
             hostname,
             getResponseFromWhois(whoisServer, hostname)
+        ) ?: throw ParserNotImplementedException(
+            String.format(
+                Locale.ROOT,
+                "No parser implementation found for %s",
+                whoisServer,
+            )
         )
     }
 

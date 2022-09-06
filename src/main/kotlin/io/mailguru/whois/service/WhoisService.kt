@@ -14,15 +14,11 @@ import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class WhoisService private constructor() {
+object WhoisService {
 
-    companion object {
-        val INSTANCE: WhoisService by lazy {
-            WhoisService()
-        }
+    private val whois by lazy {
+        WhoisClient()
     }
-
-    private val whois = WhoisClient()
 
     /**
      * Map of responsible whois servers, used as a cache in order to reduce the number of requests to whois.iana.org.
@@ -30,7 +26,7 @@ class WhoisService private constructor() {
     private val whoisServerList: ConcurrentMap<String, Optional<String>> = ConcurrentHashMap()
 
     /**
-     * Reads all implemenation of [Parser] from the "io.mailguru.whois.parser.impl" namespace and mounts them into a
+     * Reads all implementation of [Parser] from the "io.mailguru.whois.parser.impl" namespace and mounts them into a
      * [Map] with each of their [Parser.whoisServers] as the key and their instance as a value.
      * <p>
      * Since the singleton pattern is used (for [WhoisService]), every [Parser] implementation should be instantiated
@@ -67,16 +63,14 @@ class WhoisService private constructor() {
      * @throws NotPermittedException if the NIC doesn't provide any data via their whois server.
      * @throws IOException if the whois request itself failed.
      */
+    @JvmStatic
     @Suppress("SwallowedException")
     @Throws(IllegalArgumentException::class, IOException::class, NotPermittedException::class)
     fun lookup(hostname: String): WhoisResult? = getWhoisServer(hostname)?.let { whoisServer ->
-        availableParsers[whoisServer]?.let { parser ->
-            whois.connect(whoisServer)
-            whois.query(hostname).let {
-                whois.disconnect()
-                parser.parse(hostname, it)
-            }
-        }
+        availableParsers[whoisServer]?.parse(
+            hostname,
+            getResponseFromWhois(whoisServer, hostname)
+        )
     }
 
     private fun getWhoisServer(hostname: String): String? = getCachedResponsibleWhoisServer(
@@ -98,21 +92,22 @@ class WhoisService private constructor() {
     private fun getCachedResponsibleWhoisServer(tld: String): Optional<String>? = try {
         val rowPrefix = "whois:"
         whoisServerList.getOrPut(tld) {
-            whois.let { wc ->
-                wc.connect("whois.iana.org").let { _ ->
-                    wc.query(tld)
-                        .also { wc.disconnect() }
-                        .lines()
-                        .firstOrNull { it.lowercase().startsWith(rowPrefix) }
-                        ?.substring(rowPrefix.length)
-                        ?.trim()
-                        ?.let {
-                            Optional.of(it)
-                        } ?: Optional.empty()
-                }
-            }
+            getResponseFromWhois("whois.iana.org", tld)
+                .lines()
+                .firstOrNull { it.lowercase().startsWith(rowPrefix) }
+                ?.substring(rowPrefix.length)
+                ?.trim()
+                ?.let {
+                    Optional.of(it)
+                } ?: Optional.empty()
         }
     } catch (e: IOException) {
         null
+    }
+
+    private fun getResponseFromWhois(server: String, request: String): String = whois.connect(server).let { _ ->
+        whois.query(request).also {
+            whois.disconnect()
+        }
     }
 }

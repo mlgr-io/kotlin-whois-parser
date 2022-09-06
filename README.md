@@ -138,8 +138,7 @@ There are several ways to install this library:
    ./gradlew publishToMavenLocal
    ```
    Then, in your target project, import the local lib by one of the methods (1. - 3.) above. Please make sure that the `version`
-   you import matches the value given in your local
-   [build.gradle](https://github.com/mlgr-io/kotlin-whois-parser/blob/develop/build.gradle) and you local maven repository:
+   you import matches the value given in your local `build.gradle` and you local maven repository:
    ```sh
    repositories {
         mavenLocal()
@@ -156,7 +155,8 @@ There are several ways to install this library:
 ## Usage
 
 Gather information is pretty easy. The starting point is the singleton [WhoisService](src/main/kotlin/io/mailguru/whois/service/WhoisService.kt),
-that you use you get an instance and make a call to `lookup()` with the hostname in question as its argument:
+that you use you get an instance and make a call to `lookup()` with the hostname in question as its argument (from
+Kotlin as well as from Java):
 
 ```kotlin
 import io.mailguru.whois.service.WhoisService
@@ -164,7 +164,7 @@ import io.mailguru.whois.model.WhoisResult
 
 // ...
 
-val result: WhoisResult = WhoisService.INSTANCE.lookup("example.com")
+val result: WhoisResult = WhoisService.lookup("example.com")
 
 ```
 You will then, on a successful pass, have a [WhoisResult](src/main/kotlin/io/mailguru/whois/model/WhoisResult.kt) object

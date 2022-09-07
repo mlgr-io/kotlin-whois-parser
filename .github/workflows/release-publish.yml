@@ -47,12 +47,12 @@ jobs:
         with:
           head: master
           base: develop
-          title: "chore(release): ${{ github.event.inputs.version }}"
+          title: "chore(release): merge latest changes back to develop"
           labels: release
           body: |
-            This PR merges the `master` branch back into `devevlop`.
-            This happens to ensure that the updates that happend on the release branch, i.e. CHANGELOG.md and
-            `gradle.properties` updates are also present on the dev branch.
+            This PR merges the `master` branch back into `develop`.
+            This happens to ensure that the updates that happened on the release branch, i.e. `CHANGELOG.md` and
+            `gradle.properties` updates are also present on the `develop` branch.
 
       # if needed, you can checkout the latest master here, build artifacts and publish / deploy them somewhere
       # the create-release action has an output `upload_url` output that you can use to upload assets

@@ -9,7 +9,6 @@ on:
 
 jobs:
   release:
-    name: Publish new release
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
     steps:
@@ -47,12 +46,51 @@ jobs:
         with:
           head: master
           base: develop
-          title: "chore(release): ${{ github.event.inputs.version }}"
+          title: "chore(release): merge latest changes back to develop"
           labels: release
           body: |
-            This PR merges the `master` branch back into `devevlop`.
-            This happens to ensure that the updates that happend on the release branch, i.e. CHANGELOG.md and
-            `gradle.properties` updates are also present on the dev branch.
+            This PR merges the `master` branch back into `develop`.
+            This happens to ensure that the updates that happened on the release branch, i.e. `CHANGELOG.md` and
+            `gradle.properties` updates are also present on the `develop` branch.
 
       # if needed, you can checkout the latest master here, build artifacts and publish / deploy them somewhere
       # the create-release action has an output `upload_url` output that you can use to upload assets
+
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true # only merged pull requests must trigger this job
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - uses: gradle/wrapper-validation-action@v1.0.4
+
+      - uses: gradle/gradle-build-action@v2.2.5
+        with:
+          arguments: build
+
+      - name: Prepare publication signing
+        run: |
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode >> ./secring.gpg
+          echo "" >> gradle.properties
+          echo "" >> gradle.properties
+          echo "signing.keyId=$GPG_KEY_ID" >> gradle.properties
+          echo "signing.password=$GPG_PASSPHRASE" >> gradle.properties
+          echo "signing.secretKeyRingFile=./secring.gpg" >> gradle.properties
+          echo "" >> gradle.properties
+          echo "mavenCentralUsername=$MAVEN_CENTRAL_USERNAME" >> gradle.properties
+          echo "mavenCentralPassword=$MAVEN_CENTRAL_PASSWORD" >> gradle.properties
+        env:
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+
+      - uses: gradle/gradle-build-action@v2.2.5
+        with:
+          arguments: publishAllPublicationsToMavenCentralRepository

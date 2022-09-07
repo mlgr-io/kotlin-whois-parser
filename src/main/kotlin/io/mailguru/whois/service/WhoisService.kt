@@ -66,7 +66,6 @@ object WhoisService {
      * @throws IOException if the whois request itself failed.
      * @throws ParserNotImplementedException if the required parser implementation was not found.
      */
-    @JvmStatic
     @Suppress("SwallowedException")
     @Throws(
         IllegalArgumentException::class,

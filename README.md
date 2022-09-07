@@ -119,16 +119,16 @@ There are several ways to install this library:
    <dependency>
      <groupId>io.mailguru</groupId>
      <artifactId>whois-parser</artifactId>
-     <version>0.1.0</version>
+     <version>1.0.0</version>
    </dependency>
    ```
 2. Gradle Groovy DSL
    ```
-   implementation 'io.mailguru:whois-parser:0.1.0'
+   implementation 'io.mailguru:whois-parser:1.0.0'
    ```
 3. Gradle Kotlin DSL
    ```
-   implementation("io.mailguru:whois-parser:0.1.0")
+   implementation("io.mailguru:whois-parser:1.0.0")
    ```
 4. Or you may clone the latest branch of your choice (presumably this will be `develop` ) of this repository and work on
    that clone itself or publish it to your local maven repository: 

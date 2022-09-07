@@ -29,7 +29,6 @@ apply(from = "https://raw.githubusercontent.com/mlgr-io/kotlin-skeleton/0.1/02-c
 plugins {
     kotlin("jvm") version "1.7.10" // this should be the only place where the kotlin version is hard-coded
     // add additional plugins here
-    id("com.geoffgranum.gradle-conventional-changelog") version "0.3.1"
 }
 
 base {
@@ -45,10 +44,6 @@ dependencies {
     implementation("org.parboiled:parboiled-java:" + versions["parboiled"])
     implementation("org.reflections:reflections:" + versions["reflections"])
     testImplementation("io.mockk:mockk:" + versions["mockk"])
-}
-
-changelog {
-    versionNum = version as String
 }
 
 tasks.withType<KotlinCompile>().configureEach {

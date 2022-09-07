@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2022-09-07
+
 ## [1.0.0] - 2022-09-07
 
 ### Added
@@ -19,7 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   Initial release.
 -
-[Unreleased]: https://github.com/mlgr-io/kotlin-whois-parser/compare/1.0.0...HEAD
+
+[Unreleased]: https://github.com/mlgr-io/kotlin-whois-parser/compare/1.0.1...HEAD
+
+[1.0.1]: https://github.com/mlgr-io/kotlin-whois-parser/compare/1.0.0...1.0.1
 
 [1.0.0]: https://github.com/mlgr-io/kotlin-whois-parser/compare/0.1.0...1.0.0
 

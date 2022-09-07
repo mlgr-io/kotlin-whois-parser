@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Java CI
+name: "gradle build"
 
 on: [push]
 
@@ -27,11 +27,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2.2.5
         with:
-          arguments: build --scan
-
-      - uses: gradle/gradle-build-action@v2.2.5
-        with:
-          arguments: ktlintCheck
+          arguments: build
 
       - uses: actions/upload-artifact@v2
         with:

@@ -30,7 +30,7 @@ abstract class Parser(val whoisServers: Collection<String>) : BaseParser<Any>() 
      * @throws IllegalStateException if the given input could not be parsed correctly.
      */
     @Throws(IllegalStateException::class)
-    open fun parse(domain: String, input: String): WhoisResult {
+    open fun parse(hostname: String, input: String): WhoisResult {
         return ReportingParseRunner<MutableWhoisResult>(start()).run(input).let { result ->
 
             check(result.parseErrors.isEmpty()) {
@@ -44,7 +44,7 @@ abstract class Parser(val whoisServers: Collection<String>) : BaseParser<Any>() 
 
             result.resultValue.let { mutableResult ->
                 WhoisResult(
-                    domain = mutableResult.domain ?: domain,
+                    domain = mutableResult.domain ?: hostname,
                     status = mutableResult.status ?: error(PARSE_ERROR_MSG),
                     headerComment = mutableResult.header.joinToString("\n") { it.trim() }.trim('\n'),
                     changedAt = mutableResult.changed

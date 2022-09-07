@@ -154,21 +154,35 @@ There are several ways to install this library:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Gather information is pretty easy. The starting point is the singleton [WhoisService](src/main/kotlin/io/mailguru/whois/service/WhoisService.kt),
-that you use you get an instance and make a call to `lookup()` with the hostname in question as its argument (from
-Kotlin as well as from Java):
+Gather information is pretty easy. Your entry point is the [WhoisService](src/main/kotlin/io/mailguru/whois/service/WhoisService.kt)
+singleton class (that is, `object` in Kotlin), that you use to make a call to the `lookup()` method with the hostname
+in question as its argument:
 
-```kotlin
-import io.mailguru.whois.service.WhoisService
-import io.mailguru.whois.model.WhoisResult
+* in **Kotlin**:
+  ```kotlin
+  import io.mailguru.whois.service.WhoisService
+  import io.mailguru.whois.model.WhoisResult
 
-// ...
+  // ...
+  val result: WhoisResult = WhoisService.lookup("example.com")
+  // ...
 
-val result: WhoisResult = WhoisService.lookup("example.com")
+  ```
+* in **Java**:
+  ```java
+  import io.mailguru.whois.service.WhoisService;
+  import io.mailguru.whois.model.WhoisResult;
 
-```
+  // ...
+  WhoisResult result = WhoisService.INSTANCE.lookup("example.com");
+  // ...
+  ```
+  
 You will then, on a successful pass, have a [WhoisResult](src/main/kotlin/io/mailguru/whois/model/WhoisResult.kt) object
-containing all data parsed.
+containing the parsed data.
+Please be aware that exceptions may be thrown by this method; see [latest Javadoc](https://javadoc.io/doc/io.mailguru/whois-parser/latest/whois-parser/io.mailguru.whois.service/-whois-service/lookup.html)
+or [the code itself](src/main/kotlin/io/mailguru/whois/service/WhoisService.kt#L77) for details.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -187,6 +201,8 @@ Don't forget to give the project a star! Thanks again!
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+This library uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

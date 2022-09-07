@@ -54,6 +54,7 @@ jobs:
           head: release/${{ github.event.inputs.version }}
           base: master
           title: "chore(release): ${{ github.event.inputs.version }}"
+          labels: release
           reviewers: ${{ github.actor }} # By default, we request a review from the person who triggered the workflow.
           # Write a nice message to the user.
           # We are claiming things here based on the `publish-new-release.yml` workflow.

@@ -34,7 +34,6 @@ plugins {
 
 base {
     group = "io.mailguru"
-    version = "1.1.0-SNAPSHOT"
     archivesName.set("mailguru-whois-parser")
 }
 

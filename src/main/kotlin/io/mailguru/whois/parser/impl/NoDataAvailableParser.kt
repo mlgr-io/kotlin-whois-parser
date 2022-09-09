@@ -8,7 +8,7 @@ import org.parboiled.Rule
 /**
  * Parser implementation for NICs that doesn't provide any data via their WHOIS servers at all.
  */
-open class NoDataAvailableParser : Parser(
+internal open class NoDataAvailableParser : Parser(
     setOf(
         "whois.nic.ch",
         "whois.nic.es",

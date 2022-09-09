@@ -10,7 +10,7 @@ import org.parboiled.Rule
 /**
  * https://github.com/DK-Hostmaster/whois-service-specification
  */
-open class DkParser : Parser(setOf("whois.dk-hostmaster.dk")) {
+internal open class DkParser : Parser(setOf("whois.dk-hostmaster.dk")) {
 
     override fun start(): Rule = MutableWhoisResult().let { result ->
         Sequence(

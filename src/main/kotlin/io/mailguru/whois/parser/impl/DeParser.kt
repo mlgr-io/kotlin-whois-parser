@@ -10,7 +10,7 @@ import org.parboiled.Rule
 /**
  * See https://www.denic.de/fileadmin/public/documentation/DENIC-12p_EN.pdf
  */
-open class DeParser : Parser(setOf("whois.denic.de")) {
+internal open class DeParser : Parser(setOf("whois.denic.de")) {
 
     override fun start(): Rule = MutableWhoisResult().let { result ->
         Sequence(

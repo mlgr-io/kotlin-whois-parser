@@ -2,7 +2,7 @@ package io.mailguru.whois.model
 
 import io.mailguru.whois.enumeration.Status
 
-data class MutableWhoisResult(
+internal data class MutableWhoisResult(
     var changed: String? = null,
     var dnsKey: String? = null,
     var domain: String? = null,

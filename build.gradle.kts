@@ -27,7 +27,7 @@ extra["kotlinVersion"] = plugins.getPlugin(KotlinPluginWrapper::class.java).plug
 apply(from = "https://raw.githubusercontent.com/mlgr-io/kotlin-skeleton/0.1/02-configuration.gradle.kts")
 
 plugins {
-    kotlin("jvm") version "1.7.20" // this should be the only place where the kotlin version is hard-coded
+    kotlin("jvm") version "1.8.0" // this should be the only place where the kotlin version is hard-coded
     // add additional plugins here
 }
 
